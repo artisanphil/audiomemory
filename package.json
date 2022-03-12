@@ -16,7 +16,8 @@
     "dependencies": {
         "@google-cloud/language": "^4.3.2",
         "@google-cloud/text-to-speech": "^3.4.0",
-        "google-text-to-speech-concat": "^0.1.3",
+        "audioconcat": "^0.1.4",
+        "ssml-split": "^0.5.0",
         "yargs": "^16.0.0"
     },
     "devDependencies": {
