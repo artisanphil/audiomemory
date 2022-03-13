@@ -1,74 +1,113 @@
 async function main() {
+  const SaveAudio = require("./saveaudio");
+  const SplitText = require("./splittext");
   const TextToGaps = require("./texttogaps");
-  const TextToMP3 = require("./texttomp3");
-  const SSMLSplit = require("ssml-split");
-  const audioconcat = require("audioconcat");
-  const fs = require("fs");
-  const util = require("util");
-
-  let text = "The Lord is my shepherd, I lack nothing. ";
+  
+  let text = "The Lord is my shepherd, I lack nothing.\n";
   text +=
-    "He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul. ";
-  text += "He guides me along the right paths for his name’s seik. ";
+    "He makes me lie down in green pastures,\nhe leads me beside quiet waters,\nhe refreshes my soul.\n";
+  text += "He guides me along the right paths\nfor his name’s seik.\n";
   text +=
-    "Even though I walk through the darkest valley, I will fear no evil, for you are with me; ";
-  text += "your rod and your staff, they comfort me. ";
-  text += "You prepare a table before me in the presence of my enemies. ";
-  text += "You anoint my head with oil; my cup overflows. ";
+    "Even though I walk through the darkest valley,\nI will fear no evil, for you are with me;\n";
+  text += "your rod and your staff,\bthey comfort me.\n";
+  text += "You prepare a table before me\nin the presence of my enemies.\n";
+  text += "You anoint my head with oil;\nmy cup overflows.\n";
   text +=
-    "Surely your goodness and love will follow me all the days of my life, ";
+    "Surely your goodness and love will follow me\nall the days of my life,\n";
   text += "and I will dwell in the house of the Lord forever.";
-  let textWithGaps = await TextToGaps.process(text, ["NOUN", "ADJ"]);
-  textWithGaps += '<break time="2s"/>';
 
-  textWithGaps += await TextToGaps.process(text, ["NOUN", "ADJ", "VERB"]);
-  textWithGaps += '<break time="2s"/>';
+  let textBatches = SplitText.split(text);
 
-  textWithGaps += await TextToGaps.process(text, [
-    "NOUN",
-    "ADJ",
-    "VERB",
-    "PRON",
-  ]);
+  let dayCount = 0;
+  while (dayCount <= textBatches.length) {
+    console.log("day " + (dayCount + 1));
 
-  const ssmlSplit = new SSMLSplit.default({
-    // The service you are using: "google" or "aws"
-    synthesizer: "google",
-    // Finds a possible split moment starting from 4000 characters
-    softLimit: 4000,
-    // Google Text to Speech limitation
-    hardLimit: 5000,
-    // Allow to split large paragraphs, set to false to keep your <p></p> intact
-    breakParagraphsAboveHardLimit: true,
-  });
+    let textWithGaps = "";
 
-  const batches = ssmlSplit.split(textWithGaps);
+    if (dayCount >= 1) {
+      textWithGaps += await TextToGaps.process(textBatches[dayCount - 1], [
+        "NOUN",
+        "ADJ",
+        "VERB",
+      ]);
+      textWithGaps += '<break time="3s"/>';
 
-  let allMp3s = [];
-  for (let batchNr = 0; batchNr < batches.length; batchNr++) {
-    console.log(batches[batchNr]);
-    audioContent = await TextToMP3.convert(batches[batchNr], batchNr);
+      words = textBatches[dayCount - 1].split(" ");
+      textWithGaps += words[0] + " " + words[1] + " " + words[2];
 
-    const writeFile = util.promisify(fs.writeFile);
-    mp3File = "output/" + batchNr + ".mp3";
-    allMp3s.push(mp3File);
-    await writeFile(mp3File, audioContent, "binary");
-  }
+      textWithGaps += '<break time="10s"/>';
+      textBatches[dayCount - 1].split('\n').forEach((chunk) => {
+        textWithGaps += chunk + '<break time="10s"/>';
+      });
 
-  audioconcat(allMp3s)
-    .concat("output.mp3")
-    .on("start", function (command) {
-      console.log("ffmpeg process started:", command);
-    })
-    .on("error", function (err, stdout, stderr) {
-      console.error("Error:", err);
-      console.error("ffmpeg stderr:", stderr);
-    })
-    .on("end", function (output) {
-      console.error("Audio created in:", output);
+      textWithGaps += words[0] + " " + words[1] + " " + words[2];
+      textWithGaps += '<break time="30s"/>';
+  
+      textWithGaps += textBatches[dayCount - 1];
+
+      textWithGaps += '<break time="5s"/>';
+    }
+
+    if (dayCount === textBatches.length) {
+      for (let nr = 0; nr < textBatches.length; nr++) {
+        words = textBatches[nr].split(" ");
+        textWithGaps += words[0] + " " + words[1] + " " + words[2];
+
+        textWithGaps += '<break time="10s"/>';
+        textBatches[nr].split('\n').forEach((chunk) => {
+          textWithGaps += chunk + '<break time="10s"/>';
+        });
+  
+        textWithGaps += words[0] + " " + words[1] + " " + words[2];
+        textWithGaps += '<break time="30s"/>';
+
+        textWithGaps += textBatches[nr];
+      }
+
+      SaveAudio.handle(textWithGaps, (dayCount + 1));
+
+      console.log(textWithGaps);
+
+      break;
+    }
+
+    textWithGaps += textBatches[dayCount];
+    textWithGaps += '<break time="2s"/>';
+
+    textWithGaps += await TextToGaps.process(textBatches[dayCount], [
+      "NOUN",
+      "ADJ",
+    ]);
+    textWithGaps += '<break time="2s"/>';
+
+    textWithGaps += await TextToGaps.process(textBatches[dayCount], ["VERB"]);
+    textWithGaps += '<break time="2s"/>';
+
+    textWithGaps += await TextToGaps.process(textBatches[dayCount], [
+      "NOUN",
+      "ADJ",
+      "VERB",
+      "PRON",
+    ]);
+
+    words = textBatches[dayCount].split(" ");
+    textWithGaps += words[0] + " " + words[1] + " " + words[2];
+
+    textWithGaps += '<break time="10s"/>';
+
+    textBatches[dayCount].split('\n').forEach((chunk) => {
+      textWithGaps += chunk + '<break time="10s"/>';
     });
 
-  //console.log(textWithGaps);
+    textWithGaps += words[0] + " " + words[1] + " " + words[2];
+    textWithGaps += '<break time="30s"/>';
+    textWithGaps += textBatches[dayCount];
+
+    SaveAudio.handle(textWithGaps, (dayCount + 1));
+    console.log(textWithGaps);
+
+    dayCount++;
+  }
 }
 
 main(...process.argv.slice(2));
