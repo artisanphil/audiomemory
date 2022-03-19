@@ -31,7 +31,7 @@ module.exports = {
                 let partOfSpeech = word.partOfSpeech.tag;    
                 if(removePOSArray.includes(partOfSpeech)) {
                     //textWithGaps += ' * ';
-                    textWithGaps += '<audio src="https://www.lernenmitspass.ch/gap.mp3">gap</audio><break time="1s"/>'
+                    textWithGaps += '<audio src="https://www.lernenmitspass.ch/gap.mp3">gap</audio> ';
 
                     addAfterText += word.text.content + ' ';                                                                                      
                 } else {        
@@ -51,5 +51,5 @@ module.exports = {
         textWithGaps = textWithGaps.replace(/\s([.,!:’'])/g, "$1");
 
         return textWithGaps;
-    }
+    },
 }
