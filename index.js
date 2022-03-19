@@ -1,6 +1,7 @@
 async function main() {
   const SaveAudio = require("./saveaudio");
   const SplitText = require("./splittext");
+  const TextToChunks = require("./texttochunks");
   const TextToGaps = require("./texttogaps");
   const fs = require('fs');
   
@@ -35,37 +36,18 @@ async function main() {
     let textWithGaps = "";
 
     if (dayCount >= 1) {
-      words = textBatches[dayCount - 1].split(" ");
-      textWithGaps += words[0] + " " + words[1] + " " + words[2];
-
-      textBatches[dayCount - 1].split('\n ').forEach((chunk) => {
-        textWithGaps += ' <break time="8"/> ';
-  
-        textWithGaps += chunk;        
-      });
-
+      textWithGaps += TextToChunks.process(textBatches[dayCount - 1], false);
       textWithGaps += ' <break time="5s"/> ';
     }
 
     if (dayCount === textBatches.length) {
       for (let nr = 0; nr < textBatches.length; nr++) {
-        words = textBatches[nr].split(" ");
-        textWithGaps += ' <break time="1s"/> ' + words[0] + " " + words[1] + " " + words[2];
-
-        textBatches[nr].split('\n ').forEach((chunk) => {
-          textWithGaps += ' <break time="8s"/> ';
-          textWithGaps += chunk;          
-        });
-          
-        textWithGaps += ' <break time="1s"/> ' + words[0] + " " + words[1] + " " + words[2];
-        textWithGaps += ' <break time="25s"/> ';
-
-        textWithGaps += textBatches[nr];
+        textWithGaps += TextToChunks.process(textBatches[nr], true);
       }
 
       await SaveAudio.handle(textWithGaps, (dayCount + 1));
 
-      //console.log(textWithGaps);
+      console.log(textWithGaps);
 
       break;
     }
@@ -80,27 +62,8 @@ async function main() {
     textWithGaps += ' <break time="2s"/> ';
 
     textWithGaps += await TextToGaps.process(textBatches[dayCount], ["VERB"]);
-    textWithGaps += ' <break time="2s"/> ';
 
-    textWithGaps += await TextToGaps.process(textBatches[dayCount], [
-      "NOUN",
-      "ADJ",
-      "VERB",
-      "PRON",
-    ]);
-
-    words = textBatches[dayCount].split(" ");
-    textWithGaps += words[0] + " " + words[1] + " " + words[2];    
-
-    textBatches[dayCount].split('\n ').forEach((chunk) => {    
-      textWithGaps += ' <break time="8s"/> ';
-      textWithGaps += chunk;
-    });
-
-    textWithGaps += ' <break time="5s"/> ';    
-    textWithGaps += words[0] + " " + words[1] + " " + words[2];
-    textWithGaps += ' <break time="25s"/> ';
-    textWithGaps += textBatches[dayCount];
+    textWithGaps += TextToChunks.process(textBatches[dayCount], false);
 
     await SaveAudio.handle(textWithGaps, (dayCount + 1));
     console.log(textWithGaps);
