@@ -30,8 +30,8 @@ module.exports = {
                 
                 let partOfSpeech = word.partOfSpeech.tag;    
                 if(removePOSArray.includes(partOfSpeech)) {
-                    textWithGaps += ' * ';
-                    //textWithGaps += '<audio src="https://www.lernenmitspass.ch/gap.mp3">gap</audio> ';
+                    //textWithGaps += ' * ';
+                    textWithGaps += '<audio src="https://www.lernenmitspass.ch/gap.mp3">gap</audio> ';
 
                     addAfterText += word.text.content + ' ';                                                                                      
                 } else {        
