@@ -10,6 +10,9 @@ module.exports = {
       text += chunk + ' <break time="1s"/> ';
     });
 
+    words = textBatches.trim().split(" ");
+    text += ' <break time="1s"/> ' + words[0] + " " + words[1] + " " + words[2];
+
     textBatches.trim().split("\n").forEach((chunk) => {
         text += '<audio src="https://www.lernenmitspass.ch/chunk.mp3">chunk</audio> ';
   
@@ -17,12 +20,9 @@ module.exports = {
         text += chunk + ' <break time="1s"/> ';
       });  
 
-    if (repeatWholeText) {
-      words = textBatches.trim().split(" ");
-
+    if (repeatWholeText) {      
       text += ' <break time="3s"/> ';
-      text +=
-        ' <break time="1s"/> ' + words[0] + " " + words[1] + " " + words[2];
+      text += ' <break time="1s"/> ' + words[0] + " " + words[1] + " " + words[2];
       text += ' <break time="25s"/> ';
 
       text += textBatches;

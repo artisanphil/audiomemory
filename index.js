@@ -45,7 +45,7 @@ async function main() {
         textWithGaps += TextToChunks.process(textBatches[nr], true);
       }
 
-      await SaveAudio.handle(textWithGaps, (dayCount + 1));
+     await SaveAudio.handle(textWithGaps, (dayCount + 1));
 
       //console.log(textWithGaps);
 
