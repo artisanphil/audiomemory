@@ -47,7 +47,7 @@ async function main() {
 
       await SaveAudio.handle(textWithGaps, (dayCount + 1));
 
-      console.log(textWithGaps);
+      //console.log(textWithGaps);
 
       break;
     }
@@ -63,7 +63,7 @@ async function main() {
 
     textWithGaps += await TextToGaps.process(textBatches[dayCount], ["VERB"]);
 
-    textWithGaps += TextToChunks.process(textBatches[dayCount], false);
+    textWithGaps += TextToChunks.process(textBatches[dayCount], true);
 
     await SaveAudio.handle(textWithGaps, (dayCount + 1));
     console.log(textWithGaps);

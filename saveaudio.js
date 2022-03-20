@@ -59,7 +59,6 @@ module.exports = {
     let allMp3s = [];
 
     for (let batchNr = 0; batchNr < batches.length; batchNr++) {
-      //console.log(batches[batchNr]);
       console.log("batchNr: " + batchNr);
       audioContent = await TextToMP3.convert(batches[batchNr], batchNr);
 
