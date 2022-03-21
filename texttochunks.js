@@ -6,7 +6,7 @@ module.exports = {
       words = chunk.trim().split(" ");
       text += words[0] + " " + words[1];
 
-      text += ' <audio src="https://www.lernenmitspass.ch/chunk.mp3">chunk</audio> <break time="8s"/> ';
+      text += ' <audio src="https://www.lernenmitspass.ch/chunk.mp3">chunk</audio> ';
       text += chunk + ' <break time="1s"/> ';
     });
 
@@ -15,8 +15,6 @@ module.exports = {
 
     textBatches.trim().split("\n").forEach((chunk) => {
         text += '<audio src="https://www.lernenmitspass.ch/chunk.mp3">chunk</audio> ';
-  
-        text += ' <break time="8s"/> ';
         text += chunk + ' <break time="1s"/> ';
       });  
 

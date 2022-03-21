@@ -11,7 +11,7 @@ module.exports = {
     const request = {
       input: {ssml: text},
       // Select the language and SSML voice gender (optional)
-      voice: {languageCode: 'en-GB', name:'en-GB-Standard-F', ssmlGender: 'MALE'},
+      voice: {languageCode: 'en-GB', name:'en-GB-Standard-F'},
       // select the type of audio encoding
       audioConfig: {audioEncoding: 'MP3'},
     };
