@@ -3,3 +3,4 @@ node_modules
 output
 temporary
 output.mp3
+generate/input.txt
