@@ -4,8 +4,9 @@ async function main() {
   const TextToChunks = require("./texttochunks");
   const TextToGaps = require("./texttogaps");
   const fs = require('fs');
+  const path = require('path');
   
-  const text = fs.readFileSync('./input.txt', {encoding:'utf8', flag:'r'});
+  const text = fs.readFileSync(path.resolve(__dirname,'input.txt'), {encoding:'utf8', flag:'r'});
 
   let textBatches = SplitText.split(text);
   await SaveAudio.removeFilesInDirectory("output");    
@@ -36,7 +37,7 @@ async function main() {
 
      await SaveAudio.handle(textWithGaps, (dayCount + 1));
 
-      //console.log(textWithGaps);
+      console.log(textWithGaps);
 
       break;
     }
