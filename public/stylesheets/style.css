@@ -9,6 +9,10 @@ a {
   color: #FFFFFF;
 }
 
+#examplelink {
+  display: none;
+}
+
 .column {
   float: left;
   width: 58%;
@@ -21,11 +25,15 @@ a {
   width: 39%;
 }
 
-@media (max-width:600px) {
+@media only screen and (max-width: 600px) {
   .column {
     width: 100%;
   }
   .column2 {
     width: 100%;
   }
+
+  #examplelink {
+    display: block;
+  }  
 }
