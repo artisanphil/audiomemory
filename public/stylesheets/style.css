@@ -1,8 +1,31 @@
 body {
-  padding: 50px;
+  padding: 10px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background:  #1c2833;
+  color: #FFFFFF;
 }
 
 a {
-  color: #00B7FF;
+  color: #FFFFFF;
+}
+
+.column {
+  float: left;
+  width: 58%;
+  padding-right: 1%;
+  border-right: 1px solid #FFFFFF;
+}
+.column2 {
+  float: left;
+  padding-left: 1%;
+  width: 39%;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+  .column2 {
+    width: 100%;
+  }
 }
