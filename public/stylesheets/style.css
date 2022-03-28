@@ -17,11 +17,11 @@ a {
   float: left;
   width: 58%;
   padding-right: 1%;
-  border-right: 1px solid #FFFFFF;
 }
 .column2 {
   float: left;
   padding-left: 1%;
+  border-left: 1px solid #FFFFFF;
   width: 39%;
 }
 
@@ -31,6 +31,11 @@ a {
   }
   .column2 {
     width: 100%;
+    border: none;
+  }
+
+  .button {
+    margin-top: 10px;
   }
 
   #examplelink {
