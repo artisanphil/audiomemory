@@ -1,0 +1,8 @@
+version: "2.0"
+services:
+  server:
+    stdin_open: true
+    container_name: audiomemory
+    build:
+      context: .
+      dockerfile: Dockerfile
