@@ -1,5 +1,7 @@
 FROM node:gallium-alpine
 
+ENV GOOGLE_APPLICATION_CREDENTIALS service_key.json
+
 VOLUME ["/root"]
 
 ADD setup-ffmpeg.sh /root
