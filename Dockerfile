@@ -1,11 +1,12 @@
-FROM node:gallium-alpine
+FROM node:gallium
 
 ENV GOOGLE_APPLICATION_CREDENTIALS service_key.json
 
 VOLUME ["/root"]
 
 ADD setup-ffmpeg.sh /root
-RUN ["chmod", "+x", "/root/setup-ffmpeg.sh"]
+RUN chmod +x /root/setup-ffmpeg.sh
+RUN /root/setup-ffmpeg.sh
 
 # Create app directory
 WORKDIR /usr/src/app
