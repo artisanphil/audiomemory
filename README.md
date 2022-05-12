@@ -25,6 +25,8 @@ Rename the downloaded json file to service_key.json file and move it to the root
 
 Install Docker
 
+Under Docker -> Preferences... -> Resources -> File Sharing, add the path to the root folder of the project.
+
 Go to the root of the project and run:
 
 ```
@@ -42,3 +44,5 @@ To generate the output run this:
 ```
 docker exec -it audiomemory node generate/index.js 
 ```
+
+The generated files can be found in the output folder.
